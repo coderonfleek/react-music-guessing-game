@@ -19,7 +19,8 @@ class App extends Component {
       noOfQuestionsAnsweredInLevel: 0,
       allAnsweredQuestions: [],
       totalScore: 0,
-      scoreLevels: scoreLevels.reverse()
+      scoreLevels: scoreLevels.reverse(),
+      bonusPoints: 0
     };
   }
   componentDidMount() {}
@@ -73,6 +74,12 @@ class App extends Component {
       });
     }
   }; //submitAnswer
+
+  addBonusPoints = () => {
+    this.setState({
+      bonusPoints: this.state.bonusPoints + 5
+    });
+  }; //addBonusPoints
 
   render() {
     return (
@@ -293,7 +300,29 @@ class App extends Component {
             <div className="card border-secondary mb-3">
               <div className="card-header">Points</div>
               <div className="card-body text-secondary">
-                <h5 className="card-title">Title</h5>
+                <h5 className="card-title">Life Lines</h5>
+                <ul className="list-group list-group-flush">
+                  <li className="list-group-item">
+                    <i class="fas fa-phone" /> Phone A Friend
+                  </li>
+                  <li className="list-group-item">
+                    <i class="fas fa-users" /> Ask the Audience
+                  </li>
+                  <li className="list-group-item">
+                    <i class="fas fa-percentage" /> 50/50
+                  </li>
+                </ul>
+                <p>&nbsp;</p>
+                <p align="center">
+                  Bonus : {this.state.bonusPoints}
+                  <br />
+                  <button
+                    className="btn btn-primary"
+                    onClick={this.addBonusPoints}
+                  >
+                    Add (+5) Bonus Points
+                  </button>
+                </p>
               </div>
             </div>
           </div>
