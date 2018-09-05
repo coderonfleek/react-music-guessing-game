@@ -60,19 +60,24 @@ class Umpire extends Component {
     });
   }; //setAnswer
 
-  lifeLineUsed = num => {
+  lifeLineUsed = (e, num) => {
+    console.log(num);
     let update;
+    let subtraction;
     switch (num) {
       case 1:
         update = { lifeline1Used: true };
+
         break;
 
       case 2:
         update = { lifeline2Used: true };
+
         break;
 
       case 3:
         update = { lifeline3Used: true };
+
         break;
 
       case 4:
@@ -84,9 +89,20 @@ class Umpire extends Component {
     }
 
     if (update !== null) {
-      this.updateGame(update);
+      //Subtract 200 points for each life line
+      if (this.state.bonusPoints > 200) {
+        update.bonusPoints = this.state.bonusPoints - 200;
+        this.updateGame(update);
+        e.target.classList.add("used-lifeline");
+      }
     }
   }; //lifeLineUsed
+
+  returnToGamePage = () => {
+    let update = { songSelected: false, gamePage: true };
+
+    this.updateGame(update);
+  };
 
   selectSong = question => {
     if (this.selectedOptionElement) {
@@ -377,6 +393,19 @@ class Umpire extends Component {
                 ) : (
                   ""
                 )}
+
+                {this.state.currentQuestion ? (
+                  <p align="center">
+                    <button
+                      className="btn btn-success"
+                      onClick={this.returnToGamePage}
+                    >
+                      Return to Game Page
+                    </button>
+                  </p>
+                ) : (
+                  ""
+                )}
               </div>
             </div>
           </div>
@@ -387,33 +416,33 @@ class Umpire extends Component {
                 <h5 className="card-title">Life Lines</h5>
                 <ul className="list-group list-group-flush">
                   <li
-                    className="list-group-item used-lifeline"
-                    onClick={() => {
-                      this.lifeLineUsed(1);
+                    className="list-group-item"
+                    onClick={e => {
+                      this.lifeLineUsed(e, 1);
                     }}
                   >
                     <i className="fas fa-phone" /> Repeat Beat
                   </li>
                   <li
                     className="list-group-item"
-                    onClick={() => {
-                      this.lifeLineUsed(1);
+                    onClick={e => {
+                      this.lifeLineUsed(e, 2);
                     }}
                   >
                     <i className="fas fa-users" /> Repeat 5 Seconds
                   </li>
                   <li
                     className="list-group-item"
-                    onClick={() => {
-                      this.lifeLineUsed(1);
+                    onClick={e => {
+                      this.lifeLineUsed(e, 3);
                     }}
                   >
                     <i className="fas fa-percentage" /> Reveal 2 Letters
                   </li>
                   <li
                     className="list-group-item"
-                    onClick={() => {
-                      this.lifeLineUsed(1);
+                    onClick={e => {
+                      this.lifeLineUsed(e, 4);
                     }}
                   >
                     <i className="fas fa-percentage" /> Skip Beat

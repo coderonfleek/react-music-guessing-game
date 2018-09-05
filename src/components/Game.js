@@ -40,7 +40,8 @@ class Game extends Component {
       lifeline1Used: false,
       lifeline2Used: false,
       lifeline3Used: false,
-      lifeline4Used: false
+      lifeline4Used: false,
+      gamePage: true
     };
 
     this.state = newGameInstance;
@@ -81,21 +82,14 @@ class Game extends Component {
       this.selectedOptionElement.classList.remove("selectedAnswer");
     }
 
-    this.gameRef
-      .update({
-        currentQuestion: question,
-        answerSelected: false,
-        selectedAnswer: null,
-        timerStartingPoint: 20,
-        songSelected: true
-      })
-      .then(function() {
-        console.log("Document successfully updated!");
-      })
-      .catch(function(error) {
-        // The document probably doesn't exist.
-        console.error("Error updating document: ", error);
-      });
+    this.updateGame({
+      currentQuestion: question,
+      answerSelected: false,
+      selectedAnswer: null,
+      timerStartingPoint: 20,
+      songSelected: true,
+      gamePage: false
+    });
 
     /* this.setState({
       currentQuestion: question,
@@ -123,7 +117,7 @@ class Game extends Component {
     }, 20000);
   };
 
-  chooseAnswer = (e, option) => {
+  /* chooseAnswer = (e, option) => {
     if (!this.state.answerSelected) {
       this.selectedOptionElement = e.target;
       e.target.classList.add("selectedAnswer");
@@ -158,7 +152,23 @@ class Game extends Component {
     this.setState({
       bonusPoints: this.state.bonusPoints + 5
     });
-  }; //addBonusPoints
+  }; //addBonusPoints */
+
+  alreadyAnswered = question => {
+    return this.state.allAnsweredQuestions.indexOf(question) !== -1;
+  }; //alreadyAnswered
+
+  updateGame = update => {
+    this.gameRef
+      .update(update)
+      .then(function() {
+        console.log("Document successfully updated!");
+      })
+      .catch(function(error) {
+        // The document probably doesn't exist.
+        console.error("Error updating document: ", error);
+      });
+  };
 
   render() {
     return (
@@ -253,7 +263,7 @@ class Game extends Component {
               </div>
             </div>
             <div className="col-md-6">
-              {!this.state.songSelected ? (
+              {!this.state.songSelected || this.state.gamePage ? (
                 <div className="music-numbers">
                   <div className="music-numbers-title">MUSIC NUMBERS</div>
                   <div className="music-numbers-title-base" />
@@ -267,7 +277,10 @@ class Game extends Component {
                       <div className="col-md-12">
                         <div className="music-numbers-buttons" id="first">
                           {this.questions.map(question => {
-                            if (question.level === this.state.currentLevel) {
+                            if (
+                              question.level === this.state.currentLevel &&
+                              !this.alreadyAnswered(question)
+                            ) {
                               return (
                                 <button
                                   key={question.id}
