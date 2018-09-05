@@ -60,6 +60,34 @@ class Umpire extends Component {
     });
   }; //setAnswer
 
+  lifeLineUsed = num => {
+    let update;
+    switch (num) {
+      case 1:
+        update = { lifeline1Used: true };
+        break;
+
+      case 2:
+        update = { lifeline2Used: true };
+        break;
+
+      case 3:
+        update = { lifeline3Used: true };
+        break;
+
+      case 4:
+        update = { lifeline4Used: true };
+        break;
+
+      default:
+        break;
+    }
+
+    if (update !== null) {
+      this.updateGame(update);
+    }
+  }; //lifeLineUsed
+
   selectSong = question => {
     if (this.selectedOptionElement) {
       this.selectedOptionElement.classList.remove("selectedAnswer");
@@ -93,34 +121,29 @@ class Umpire extends Component {
   }; //chooseAnswer
 
   submitAnswer = e => {
-    this.gameRef
-      .update({
-        noOfQuestionsAnsweredInLevel:
-          this.state.noOfQuestionsAnsweredInLevel + 1,
-        allAnsweredQuestions: [
-          ...this.state.allAnsweredQuestions,
-          this.state.currentQuestion
-        ],
-        totalScore:
-          Number(this.state.totalScore) +
-          Number(this.state.currentQuestion.scoreWeight)
-      })
-      .then(function() {
-        console.log("Document successfully updated!");
-      })
-      .catch(function(error) {
-        // The document probably doesn't exist.
-        console.error("Error updating document: ", error);
-      });
+    this.updateGame({
+      noOfQuestionsAnsweredInLevel: this.state.noOfQuestionsAnsweredInLevel + 1,
+      allAnsweredQuestions: [
+        ...this.state.allAnsweredQuestions,
+        this.state.currentQuestion
+      ],
+      totalScore:
+        Number(this.state.totalScore) +
+        Number(this.state.currentQuestion.scoreWeight)
+    });
   }; //submitAnswer
 
   addBonusPoints = () => {
     console.log(this.state.selectedBonus);
+    this.updateGame({
+      bonusPoints:
+        Number(this.state.bonusPoints) + Number(this.state.selectedBonus)
+    });
+  }; //addBonusPoints
+
+  updateGame = update => {
     this.gameRef
-      .update({
-        bonusPoints:
-          Number(this.state.bonusPoints) + Number(this.state.selectedBonus)
-      })
+      .update(update)
       .then(function() {
         console.log("Document successfully updated!");
       })
@@ -128,7 +151,7 @@ class Umpire extends Component {
         // The document probably doesn't exist.
         console.error("Error updating document: ", error);
       });
-  }; //addBonusPoints
+  };
 
   render() {
     return (
@@ -363,14 +386,37 @@ class Umpire extends Component {
               <div className="card-body text-secondary">
                 <h5 className="card-title">Life Lines</h5>
                 <ul className="list-group list-group-flush">
-                  <li className="list-group-item">
-                    <i className="fas fa-phone" /> Phone A Friend
+                  <li
+                    className="list-group-item used-lifeline"
+                    onClick={() => {
+                      this.lifeLineUsed(1);
+                    }}
+                  >
+                    <i className="fas fa-phone" /> Repeat Beat
                   </li>
-                  <li className="list-group-item">
-                    <i className="fas fa-users" /> Ask the Audience
+                  <li
+                    className="list-group-item"
+                    onClick={() => {
+                      this.lifeLineUsed(1);
+                    }}
+                  >
+                    <i className="fas fa-users" /> Repeat 5 Seconds
                   </li>
-                  <li className="list-group-item">
-                    <i className="fas fa-percentage" /> 50/50
+                  <li
+                    className="list-group-item"
+                    onClick={() => {
+                      this.lifeLineUsed(1);
+                    }}
+                  >
+                    <i className="fas fa-percentage" /> Reveal 2 Letters
+                  </li>
+                  <li
+                    className="list-group-item"
+                    onClick={() => {
+                      this.lifeLineUsed(1);
+                    }}
+                  >
+                    <i className="fas fa-percentage" /> Skip Beat
                   </li>
                 </ul>
                 <p>&nbsp;</p>

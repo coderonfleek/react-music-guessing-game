@@ -39,7 +39,8 @@ class Game extends Component {
       gameInitiationTime: +new Date(),
       lifeline1Used: false,
       lifeline2Used: false,
-      lifeline3Used: false
+      lifeline3Used: false,
+      lifeline4Used: false
     };
 
     this.state = newGameInstance;

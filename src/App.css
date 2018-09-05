@@ -170,3 +170,8 @@ span {
   top: -10px;
   right: 75px;
 }
+
+.used-lifeline {
+  text-decoration: line-through !important;
+  color: red;
+}
