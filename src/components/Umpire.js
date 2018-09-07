@@ -317,6 +317,17 @@ class Umpire extends Component {
                     )}
                   </div>
                 </div>
+                <div className="row justify-content-md-center">
+                  <div className="col-md-8">
+                    {this.state.currentQuestion ? (
+                      <p align="center">
+                        Answer : <b>{this.state.currentQuestion.answer}</b>
+                      </p>
+                    ) : (
+                      ""
+                    )}
+                  </div>
+                </div>
                 {/*
                 <div className="row justify-content-md-center">
                   <div className="col-md-8">

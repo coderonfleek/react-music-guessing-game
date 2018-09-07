@@ -277,6 +277,146 @@ const questions = [
     ],
     answer: "Ye",
     scoreWeight: 50000
+  },
+  {
+    id: "11",
+    order: 11,
+    question: "What is the title of the song?",
+    level: 3,
+    file:
+      "http://9jaflaver.com/wp-content/uploads/2018/04/GreyC_Ft_Patoranking_Rude_Boy_9jaflaver.com_.mp3",
+    options: [
+      {
+        name: "A",
+        body: "Rude Boy"
+      },
+      {
+        name: "B",
+        body: "Amen"
+      },
+      {
+        name: "C",
+        body: "Wavy"
+      },
+      {
+        name: "D",
+        body: "Feeling the beat"
+      }
+    ],
+    answer: "Rude Boy",
+    scoreWeight: 100000
+  },
+  {
+    id: "12",
+    order: 12,
+    question: "What is the title of the song?",
+    level: 3,
+    file:
+      "http://download.toribaze.com/uploads/2018/DJ-Bobbi-X-Nyanda-BrickNLace-Red-Alert-(ToriBaze.com).mp3",
+    options: [
+      {
+        name: "A",
+        body: "Rude Boy"
+      },
+      {
+        name: "B",
+        body: "Amen"
+      },
+      {
+        name: "C",
+        body: "Wavy"
+      },
+      {
+        name: "D",
+        body: "Feeling the beat"
+      }
+    ],
+    answer: "Red Alert",
+    scoreWeight: 100000
+  },
+  {
+    id: "13",
+    order: 13,
+    question: "What is the title of the song?",
+    level: 3,
+    file:
+      "https://www.naijaonpoint.com/wp-content/uploads/2018/05/Maroon_5_ft_Cardi_B_-_Girls_Like_You-1.mp3",
+    options: [
+      {
+        name: "A",
+        body: "Rude Boy"
+      },
+      {
+        name: "B",
+        body: "Amen"
+      },
+      {
+        name: "C",
+        body: "Wavy"
+      },
+      {
+        name: "D",
+        body: "Feeling the beat"
+      }
+    ],
+    answer: "Girls Like You",
+    scoreWeight: 100000
+  },
+  {
+    id: "14",
+    order: 14,
+    question: "What is the title of the song?",
+    level: 3,
+    file:
+      "http://naijaloaded.store/wp-content/uploads/2018/04/Patoranking-Suh-Different.mp3",
+    options: [
+      {
+        name: "A",
+        body: "Rude Boy"
+      },
+      {
+        name: "B",
+        body: "Amen"
+      },
+      {
+        name: "C",
+        body: "Wavy"
+      },
+      {
+        name: "D",
+        body: "Feeling the beat"
+      }
+    ],
+    answer: "Suh Different",
+    scoreWeight: 100000
+  },
+  {
+    id: "15",
+    order: 15,
+    question: "What is the title of the song?",
+    level: 3,
+    file:
+      "http://naijaloaded.store/wp-content/uploads/2018/05/Teni-Askamaya.mp3",
+    options: [
+      {
+        name: "A",
+        body: "Rude Boy"
+      },
+      {
+        name: "B",
+        body: "Amen"
+      },
+      {
+        name: "C",
+        body: "Wavy"
+      },
+      {
+        name: "D",
+        body: "Feeling the beat"
+      }
+    ],
+    answer: "Askamaya",
+    scoreWeight: 100000
   }
 ];
 
