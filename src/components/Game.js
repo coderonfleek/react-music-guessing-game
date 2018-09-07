@@ -7,6 +7,7 @@ import "../main2.css";
 import logo from "../logo.png";
 import { firestore } from "../firebase";
 import config from "../config";
+import _ from "lodash";
 
 class Game extends Component {
   questions;
@@ -81,40 +82,33 @@ class Game extends Component {
     if (this.selectedOptionElement) {
       this.selectedOptionElement.classList.remove("selectedAnswer");
     }
-
-    this.updateGame({
-      currentQuestion: question,
-      answerSelected: false,
-      selectedAnswer: null,
-      timerStartingPoint: 20,
-      songSelected: true,
-      gamePage: false
-    });
-
-    /* this.setState({
-      currentQuestion: question,
-      answerSelected: false,
-      selectedAnswer: null,
-      timerStartingPoint: 20,
-      songSelected: true
-    }); */
-
-    this.audio.src = question.file;
-    this.audio.play();
-
-    let timerInterval = setInterval(() => {
-      this.setState({
-        timerStartingPoint: this.state.timerStartingPoint - 1
+    if (!this.alreadyAnswered(question)) {
+      this.updateGame({
+        currentQuestion: question,
+        answerSelected: false,
+        selectedAnswer: null,
+        timerStartingPoint: 20,
+        songSelected: true,
+        gamePage: false
       });
-    }, 1000);
 
-    setTimeout(() => {
-      this.audio.pause();
-      this.setState({
-        timerStartingPoint: 0
-      });
-      clearInterval(timerInterval);
-    }, 20000);
+      this.audio.src = question.file;
+      this.audio.play();
+
+      let timerInterval = setInterval(() => {
+        this.setState({
+          timerStartingPoint: this.state.timerStartingPoint - 1
+        });
+      }, 1000);
+
+      setTimeout(() => {
+        this.audio.pause();
+        this.setState({
+          timerStartingPoint: 0
+        });
+        clearInterval(timerInterval);
+      }, 20000);
+    }
   };
 
   /* chooseAnswer = (e, option) => {
@@ -155,7 +149,20 @@ class Game extends Component {
   }; //addBonusPoints */
 
   alreadyAnswered = question => {
-    return this.state.allAnsweredQuestions.indexOf(question) !== -1;
+    console.log(question);
+    console.log(this.state.allAnsweredQuestions);
+    /* this.state.allAnsweredQuestions.forEach(q => {
+      console.log(q.id);
+      console.log(question.id);
+      if (q.id == question.id) {
+        return true;
+      }
+    });
+
+    return false; */
+    let found = _.find(this.state.allAnsweredQuestions, { id: question.id });
+
+    return !!found;
   }; //alreadyAnswered
 
   updateGame = update => {
@@ -188,7 +195,7 @@ class Game extends Component {
                           return (
                             <div
                               key={score.totalScore}
-                              className="score-level-numbers"
+                              className="score-level-numbers active-score"
                             >
                               {score.totalScore}
                             </div>
@@ -215,7 +222,7 @@ class Game extends Component {
                           return (
                             <div
                               key={score.totalScore}
-                              className="score-level-numbers"
+                              className="score-level-numbers active-score"
                             >
                               {score.totalScore}
                             </div>
@@ -241,7 +248,7 @@ class Game extends Component {
                           return (
                             <div
                               key={score.totalScore}
-                              className="score-level-numbers  score-level-start"
+                              className="score-level-numbers score-level-start active-score"
                             >
                               {score.totalScore}
                             </div>
@@ -367,19 +374,47 @@ class Game extends Component {
                 </div>
                 <div className="game-assistants-features">
                   <div className="feature">
-                    <button id="repeat-beat">REPEAT BEAT</button>
+                    <button
+                      id="repeat-beat"
+                      className={`${
+                        this.state.lifeline1Used ? "life-line-used" : ""
+                      }`}
+                    >
+                      REPEAT BEAT
+                    </button>
                     &nbsp;-100
                   </div>
                   <div className="feature">
-                    <button id="repeat-5-seconds">REPEAT +5 SECONDS</button>
+                    <button
+                      id="repeat-5-seconds"
+                      className={`${
+                        this.state.lifeline2Used ? "life-line-used" : ""
+                      }`}
+                    >
+                      REPEAT +5 SECONDS
+                    </button>
                     &nbsp;-150
                   </div>
                   <div className="feature">
-                    <button id="reveal-2-letters">REVEAL 2 LETTERS</button>
+                    <button
+                      id="reveal-2-letters"
+                      className={`${
+                        this.state.lifeline3Used ? "life-line-used" : ""
+                      }`}
+                    >
+                      REVEAL 2 LETTERS
+                    </button>
                     &nbsp;-250
                   </div>
                   <div className="feature">
-                    <button id="skip-beats">SKIP BEATS</button>
+                    <button
+                      id="skip-beats"
+                      className={`${
+                        this.state.lifeline4Used ? "life-line-used" : ""
+                      }`}
+                    >
+                      SKIP BEATS
+                    </button>
                     &nbsp;-300
                   </div>
                 </div>

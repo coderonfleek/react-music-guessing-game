@@ -236,3 +236,12 @@ img {
   margin: 10px;
   margin-bottom: 60px;
 }
+
+.active-score {
+  background-color: brown;
+  color: gold;
+}
+
+.life-line-used {
+  text-decoration: line-through;
+}

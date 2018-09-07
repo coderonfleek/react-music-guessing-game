@@ -24,7 +24,7 @@ const questions = [
         body: "Baba"
       }
     ],
-    answer: "B",
+    answer: "Bio Bio",
     scoreWeight: 5000
   },
   {
@@ -52,7 +52,7 @@ const questions = [
         body: "Flora My Flower"
       }
     ],
-    answer: "C",
+    answer: "Aje",
     scoreWeight: 5000
   },
   {
@@ -80,7 +80,7 @@ const questions = [
         body: "Biko"
       }
     ],
-    answer: "A",
+    answer: "Lova Lova",
     scoreWeight: 5000
   },
   {
@@ -108,7 +108,7 @@ const questions = [
         body: "Biko"
       }
     ],
-    answer: "B",
+    answer: "For You",
     scoreWeight: 5000
   },
   {
@@ -136,8 +136,147 @@ const questions = [
         body: "Feeling the beat"
       }
     ],
-    answer: "B",
+    answer: "Feeling the beat",
     scoreWeight: 5000
+  },
+  {
+    id: "6",
+    order: 6,
+    question: "What is the title of the song?",
+    level: 2,
+    file:
+      "http://naijaloaded.store/wp-content/uploads/2018/05/Mystro-X-Wizkid-%E2%80%93-Immediately.mp3",
+    options: [
+      {
+        name: "A",
+        body: "Rude Boy"
+      },
+      {
+        name: "B",
+        body: "Amen"
+      },
+      {
+        name: "C",
+        body: "Wavy"
+      },
+      {
+        name: "D",
+        body: "Feeling the beat"
+      }
+    ],
+    answer: "Immediately",
+    scoreWeight: 50000
+  },
+  {
+    id: "7",
+    order: 7,
+    question: "What is the title of the song?",
+    level: 2,
+    file:
+      "https://9jaflaver.com/wp-content/uploads/2018/02/Wizkid_Soco_Ft_Ceeza_Milli_Spotless_Terri_9jaflaver.com_.mp3",
+    options: [
+      {
+        name: "A",
+        body: "Rude Boy"
+      },
+      {
+        name: "B",
+        body: "Amen"
+      },
+      {
+        name: "C",
+        body: "Wavy"
+      },
+      {
+        name: "D",
+        body: "Feeling the beat"
+      }
+    ],
+    answer: "Soco",
+    scoreWeight: 50000
+  },
+  {
+    id: "8",
+    order: 8,
+    question: "What is the title of the song?",
+    level: 2,
+    file:
+      "https://9jaflaver.com/wp-content/uploads/2017/10/DJ_Cuppy_Ft_Tekno_Green_Light_9jaflaver.com_.mp3",
+    options: [
+      {
+        name: "A",
+        body: "Rude Boy"
+      },
+      {
+        name: "B",
+        body: "Amen"
+      },
+      {
+        name: "C",
+        body: "Wavy"
+      },
+      {
+        name: "D",
+        body: "Feeling the beat"
+      }
+    ],
+    answer: "Green Light",
+    scoreWeight: 50000
+  },
+  {
+    id: "9",
+    order: 9,
+    question: "What is the title of the song?",
+    level: 2,
+    file:
+      "http://tooxclusive.com/wp-content/uploads/2013/10/RandsandNairas-Emmy-Gee-ft-Ab-Crazy-Dj-Dimplez.mp3",
+    options: [
+      {
+        name: "A",
+        body: "Rude Boy"
+      },
+      {
+        name: "B",
+        body: "Amen"
+      },
+      {
+        name: "C",
+        body: "Wavy"
+      },
+      {
+        name: "D",
+        body: "Feeling the beat"
+      }
+    ],
+    answer: "Rands and Naira",
+    scoreWeight: 50000
+  },
+  {
+    id: "10",
+    order: 10,
+    question: "What is the title of the song?",
+    level: 2,
+    file: "https://www.jukeboxmusic.com.ng/wp-content/uploads/burna-boy-ye.mp3",
+    options: [
+      {
+        name: "A",
+        body: "Rude Boy"
+      },
+      {
+        name: "B",
+        body: "Amen"
+      },
+      {
+        name: "C",
+        body: "Wavy"
+      },
+      {
+        name: "D",
+        body: "Feeling the beat"
+      }
+    ],
+    answer: "Ye",
+    scoreWeight: 50000
   }
 ];
 

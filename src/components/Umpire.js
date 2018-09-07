@@ -137,8 +137,10 @@ class Umpire extends Component {
   }; //chooseAnswer
 
   submitAnswer = e => {
-    this.updateGame({
-      noOfQuestionsAnsweredInLevel: this.state.noOfQuestionsAnsweredInLevel + 1,
+    let totalQuestionsAnsweredInLevel =
+      this.state.noOfQuestionsAnsweredInLevel + 1;
+
+    let update = {
       allAnsweredQuestions: [
         ...this.state.allAnsweredQuestions,
         this.state.currentQuestion
@@ -146,7 +148,16 @@ class Umpire extends Component {
       totalScore:
         Number(this.state.totalScore) +
         Number(this.state.currentQuestion.scoreWeight)
-    });
+    };
+
+    //If all questions in level are already answered, move to next level
+    if (totalQuestionsAnsweredInLevel === 3) {
+      update.noOfQuestionsAnsweredInLevel = 0;
+      update.currentLevel = this.state.currentLevel + 1;
+    } else {
+      update.noOfQuestionsAnsweredInLevel = totalQuestionsAnsweredInLevel;
+    }
+    this.updateGame(update);
   }; //submitAnswer
 
   addBonusPoints = () => {
