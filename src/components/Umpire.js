@@ -138,7 +138,9 @@ class Umpire extends Component {
 
   submitAnswer = e => {
     let totalQuestionsAnsweredInLevel =
-      this.state.noOfQuestionsAnsweredInLevel + 1;
+      Number(this.state.noOfQuestionsAnsweredInLevel) + 1;
+
+    console.log(totalQuestionsAnsweredInLevel);
 
     let update = {
       allAnsweredQuestions: [
@@ -153,7 +155,7 @@ class Umpire extends Component {
     //If all questions in level are already answered, move to next level
     if (totalQuestionsAnsweredInLevel === 3) {
       update.noOfQuestionsAnsweredInLevel = 0;
-      update.currentLevel = this.state.currentLevel + 1;
+      update.currentLevel = Number(this.state.currentLevel) + 1;
     } else {
       update.noOfQuestionsAnsweredInLevel = totalQuestionsAnsweredInLevel;
     }
