@@ -60,7 +60,7 @@ class Umpire extends Component {
     });
   }; //setAnswer
 
-  lifeLineUsed = (e, num) => {
+  lifeLineUsed = (e, num, points) => {
     console.log(num);
     let update;
     let subtraction;
@@ -90,8 +90,8 @@ class Umpire extends Component {
 
     if (update !== null) {
       //Subtract 200 points for each life line
-      if (this.state.bonusPoints > 200) {
-        update.bonusPoints = this.state.bonusPoints - 200;
+      if (this.state.bonusPoints > points) {
+        update.bonusPoints = this.state.bonusPoints - points;
         this.updateGame(update);
         e.target.classList.add("used-lifeline");
       }
@@ -442,7 +442,7 @@ class Umpire extends Component {
                   <li
                     className="list-group-item"
                     onClick={e => {
-                      this.lifeLineUsed(e, 1);
+                      this.lifeLineUsed(e, 1, 100);
                     }}
                   >
                     <i className="fas fa-phone" /> Repeat Beat
@@ -450,7 +450,7 @@ class Umpire extends Component {
                   <li
                     className="list-group-item"
                     onClick={e => {
-                      this.lifeLineUsed(e, 2);
+                      this.lifeLineUsed(e, 2, 150);
                     }}
                   >
                     <i className="fas fa-users" /> Repeat 5 Seconds
@@ -458,7 +458,7 @@ class Umpire extends Component {
                   <li
                     className="list-group-item"
                     onClick={e => {
-                      this.lifeLineUsed(e, 3);
+                      this.lifeLineUsed(e, 3, 250);
                     }}
                   >
                     <i className="fas fa-percentage" /> Reveal 2 Letters
@@ -466,7 +466,7 @@ class Umpire extends Component {
                   <li
                     className="list-group-item"
                     onClick={e => {
-                      this.lifeLineUsed(e, 4);
+                      this.lifeLineUsed(e, 4, 300);
                     }}
                   >
                     <i className="fas fa-percentage" /> Skip Beat
