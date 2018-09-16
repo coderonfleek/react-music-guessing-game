@@ -34,6 +34,12 @@ export default class Umpire extends Component {
     });
   };
 
+  changeGameLevel = () => {
+    this.setState({
+      currentLevel: this.state.currentLevel + 1
+    });
+  };
+
   render() {
     return (
       <div className="container">
@@ -212,7 +218,10 @@ export default class Umpire extends Component {
                   </button>
                 </li>
                 <li className="list-group-item">
-                  <button className="btn btn-success btn-block">
+                  <button
+                    className="btn btn-success btn-block"
+                    onClick={this.changeGameLevel}
+                  >
                     Change Game Level
                   </button>
                 </li>
