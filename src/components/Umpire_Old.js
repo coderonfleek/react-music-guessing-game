@@ -418,18 +418,7 @@ class Umpire extends Component {
                   ""
                 )}
 
-                {this.state.currentQuestion ? (
-                  <p align="center">
-                    <button
-                      className="btn btn-success"
-                      onClick={this.returnToGamePage}
-                    >
-                      Return to Game Page
-                    </button>
-                  </p>
-                ) : (
-                  ""
-                )}
+                
               </div>
             </div>
           </div>

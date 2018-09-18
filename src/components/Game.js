@@ -47,33 +47,27 @@ class Game extends Component {
 
     this.state = newGameInstance;
 
+    //Get Current Game
     firestore
       .collection(config.gameCollection)
-      .add(newGameInstance)
-      .then(docRef => {
-        console.log(docRef);
-        this.gameRef = docRef;
-        console.log(`DocRef ID : ${docRef.id}`);
-        this.gameID = docRef.id;
+      .orderBy("gameInitiationTime", "desc")
+      .limit(1)
+      .onSnapshot(querySnapshot => {
+        var games = [];
+        querySnapshot.forEach(doc => {
+          this.gameRef = firestore
+            .collection(config.gameCollection)
+            .doc(doc.id);
+          games.push(doc.data());
+        });
 
-        //Setup realtime tracking of the game
-        firestore
-          .collection(config.gameCollection)
-          .orderBy("gameInitiationTime", "desc")
-          .limit(1)
-          .onSnapshot(querySnapshot => {
-            var games = [];
-            querySnapshot.forEach(function(doc) {
-              games.push(doc.data());
-            });
-
-            console.log(games);
-            this.setState(games[0]);
-          });
-      })
-      .catch(err => {
-        console.log("Could not start game");
-        console.log(err);
+        console.log(games);
+        this.setState(games[0], () => {
+          //If a song has been selected, play it
+          if (this.state.songPlaying) {
+            this.playSelectedSong(this.state.currentQuestion);
+          }
+        });
       });
   }
   componentDidMount() {}
@@ -103,70 +97,70 @@ class Game extends Component {
 
       setTimeout(() => {
         this.audio.pause();
-        this.setState({
-          timerStartingPoint: 0
+        this.updateGame({
+          timerStartingPoint: 0,
+          songPlaying: false
         });
         clearInterval(timerInterval);
       }, 20000);
     }
-  };
+  }; //selectSong
 
-  /* chooseAnswer = (e, option) => {
-    if (!this.state.answerSelected) {
-      this.selectedOptionElement = e.target;
-      e.target.classList.add("selectedAnswer");
-
-      console.log(option);
+  playSelectedSong = question => {
+    if (!this.alreadyAnswered(question)) {
       this.setState({
-        answerSelected: true,
-        selectedAnswer: option
+        timerStartingPoint: 20,
+        songSelected: true,
+        gamePage: false
       });
-    }
-  }; //chooseAnswer
-
-  submitAnswer = e => {
-    if (
-      this.state.selectedAnswer &&
-      this.state.selectedAnswer.name === this.state.currentQuestion.answer
-    ) {
-      this.setState({
-        noOfQuestionsAnsweredInLevel:
-          this.state.noOfQuestionsAnsweredInLevel + 1,
-        allAnsweredQuestions: [
-          ...this.state.allAnsweredQuestions,
-          this.state.currentQuestion
-        ],
-        totalScore:
-          this.state.totalScore + this.state.currentQuestion.scoreWeight
+      this.updateGame({
+        timerStartingPoint: 20,
+        songSelected: true,
+        gamePage: false
       });
-    }
-  }; //submitAnswer
 
-  addBonusPoints = () => {
-    this.setState({
-      bonusPoints: this.state.bonusPoints + 5
-    });
-  }; //addBonusPoints */
+      this.audio.src = question.file;
+      this.audio.play();
+
+      let timerInterval = setInterval(() => {
+        if (this.state.timerStartingPoint > 0) {
+          this.setState({
+            timerStartingPoint: this.state.timerStartingPoint - 1
+          });
+        }
+      }, 1000);
+
+      setTimeout(() => {
+        this.audio.pause();
+
+        this.setState({
+          timerStartingPoint: 0,
+          songPlaying: false
+        });
+
+        this.updateGame({
+          songPlaying: false
+        });
+        clearInterval(timerInterval);
+      }, 20000);
+    }
+  }; //playSelectedSong
 
   alreadyAnswered = question => {
-    console.log(question);
-    console.log(this.state.allAnsweredQuestions);
-    /* this.state.allAnsweredQuestions.forEach(q => {
-      console.log(q.id);
-      console.log(question.id);
-      if (q.id == question.id) {
-        return true;
-      }
-    });
+    if (question) {
+      console.log(question);
+      console.log(this.state.allAnsweredQuestions);
 
-    return false; */
-    let found = _.find(this.state.allAnsweredQuestions, { id: question.id });
+      let found = _.find(this.state.allAnsweredQuestions, { id: question.id });
 
-    return !!found;
+      return !!found;
+    }
+
+    return false;
   }; //alreadyAnswered
 
   updateGame = update => {
-    this.gameRef
+    return this.gameRef
       .update(update)
       .then(function() {
         console.log("Document successfully updated!");
@@ -272,7 +266,7 @@ class Game extends Component {
             <div className="col-md-6">
               {!this.state.songSelected || this.state.gamePage ? (
                 <div className="music-numbers">
-                  <div className="music-numbers-title">MUSIC NUMBERS</div>
+                  <div className="music-numbers-title">PLAYLIST</div>
                   <div className="music-numbers-title-base" />
                   <div className="music-numbers-board">
                     <div className="row">
@@ -292,9 +286,6 @@ class Game extends Component {
                                 <button
                                   key={question.id}
                                   className="individual-button"
-                                  onClick={() => {
-                                    this.selectSong(question);
-                                  }}
                                 >
                                   {question.id}
                                 </button>
@@ -323,44 +314,6 @@ class Game extends Component {
 
                   <div className="title-container">
                     <div className="title">WHAT IS THE TITLE OF THIS SONG?</div>
-                  </div>
-                  <div className="answer-section">
-                    <div className="row">
-                      <div className="col-md-6">
-                        <div className="answer-board" id="answer-board-1">
-                          Record Label
-                        </div>
-                        <div className="answer-points" id="answer-points-30">
-                          POINTS <span>30</span>
-                        </div>
-                      </div>
-                      <div className="col-md-6">
-                        <div className="answer-board" id="answer-board-2">
-                          Release Date
-                        </div>
-                        <div className="answer-points" id="answer-points-50">
-                          POINTS <span>50</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="row">
-                      <div className="col-md-6">
-                        <div className="answer-board" id="answer-board-3">
-                          Artist
-                        </div>
-                        <div className="answer-points" id="answer-points-50-2">
-                          POINTS <span>50</span>
-                        </div>
-                      </div>
-                      <div className="col-md-6">
-                        <div className="answer-board" id="answer-board-4">
-                          Producer
-                        </div>
-                        <div className="answer-points" id="answer-points-70">
-                          POINTS <span>70</span>
-                        </div>
-                      </div>
-                    </div>
                   </div>
                 </div>
               )}
