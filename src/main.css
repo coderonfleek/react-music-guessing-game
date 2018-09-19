@@ -31,7 +31,7 @@ body {
     rgb(0, 183, 255),
     rgb(215, 135, 240)
   );
-  padding-bottom: 0;
+  padding-bottom: 50px;
 }
 
 #score-level-title {
@@ -244,4 +244,17 @@ img {
 
 .life-line-used {
   text-decoration: line-through;
+}
+
+#activePlayerDisplay {
+  width: 90%;
+  border: 5px solid gold;
+  border-radius: 5px;
+  text-align: center;
+  font-size: 40px;
+  padding: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 30px;
+  margin-bottom: 20px;
 }

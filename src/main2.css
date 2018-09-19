@@ -30,7 +30,7 @@ body {
     rgb(0, 183, 255),
     rgb(215, 135, 240)
   );
-  padding-bottom: 0;
+  padding-bottom: 50px;
 }
 
 #score-level-title {
