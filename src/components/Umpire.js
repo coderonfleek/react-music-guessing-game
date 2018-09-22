@@ -5,6 +5,9 @@ import { firestore } from "../firebase";
 import config from "../config";
 import _ from "lodash";
 import "../App.css";
+import { confirmAlert } from "react-confirm-alert";
+import "../../node_modules/react-confirm-alert/src/react-confirm-alert.css";
+import $ from "jquery";
 
 export default class Umpire extends Component {
   questions;
@@ -30,6 +33,9 @@ export default class Umpire extends Component {
       player2Level: 0,
       player3Level: 0,
       songPlaying: false,
+      player1Removed: false,
+      player2Removed: false,
+      player3Removed: false,
       gameInitiationTime: +new Date()
     };
 
@@ -60,6 +66,11 @@ export default class Umpire extends Component {
         this.setState(games[0]);
       });
   } //constructor
+
+  componentDidMount() {
+    //Initialize tooltips
+    $('[data-toggle="tooltip"]').tooltip();
+  }
 
   startNewGame = () => {
     firestore
@@ -99,46 +110,86 @@ export default class Umpire extends Component {
   };
 
   submitAnswer = e => {
-    let totalQuestionsAnsweredInLevel =
-      Number(this.state.noOfQuestionsAnsweredInLevel) + 1;
+    if (this.state.currentQuestion !== null) {
+      let totalQuestionsAnsweredInLevel =
+        Number(this.state.noOfQuestionsAnsweredInLevel) + 1;
 
-    console.log(totalQuestionsAnsweredInLevel);
+      console.log(totalQuestionsAnsweredInLevel);
 
-    //Attach player to question answered
-    this.state.currentQuestion.player = this.state.currentPlayer;
+      //Attach player to question answered
+      this.state.currentQuestion.player = this.state.currentPlayer;
 
-    let update = {
-      allAnsweredQuestions: [
-        ...this.state.allAnsweredQuestions,
-        this.state.currentQuestion
-      ],
-      totalScore:
-        Number(this.state.totalScore) +
-        Number(this.state.currentQuestion.scoreWeight)
-    };
+      let update = {
+        allAnsweredQuestions: [
+          ...this.state.allAnsweredQuestions,
+          this.state.currentQuestion
+        ],
+        totalScore:
+          Number(this.state.totalScore) +
+          Number(this.state.currentQuestion.scoreWeight)
+      };
 
-    //Set total questions answered
-    update.noOfQuestionsAnsweredInLevel = totalQuestionsAnsweredInLevel;
-    //Increase player level
-    switch (this.state.currentPlayer) {
-      case 1:
-        update.player1Level = this.state.player1Level + 1;
-        break;
+      //Set total questions answered
+      update.noOfQuestionsAnsweredInLevel = totalQuestionsAnsweredInLevel;
+      //Increase player level
+      switch (this.state.currentPlayer) {
+        case 1:
+          update.player1Level = this.state.player1Level + 1;
+          break;
 
-      case 2:
-        update.player2Level = this.state.player2Level + 1;
-        break;
+        case 2:
+          update.player2Level = this.state.player2Level + 1;
+          break;
 
-      case 3:
-        update.player3Level = this.state.player3Level + 1;
-        break;
+        case 3:
+          update.player3Level = this.state.player3Level + 1;
+          break;
 
-      default:
-        break;
+        default:
+          break;
+      }
+
+      this.updateGame(update);
     }
-
-    this.updateGame(update);
   }; //submitAnswer
+
+  confirmSubmitAnswer = () => {
+    confirmAlert({
+      title: "Confirm to submit",
+      message:
+        "Are you sure you want to confirm answer for Player " +
+        this.state.currentPlayer,
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () => this.submitAnswer()
+        },
+        {
+          label: "No",
+          onClick: () => {}
+        }
+      ]
+    });
+  }; //confirmSubmitAnswer
+
+  confirmReducePlayerLevel = () => {
+    confirmAlert({
+      title: "Confirm to submit",
+      message:
+        "Are you sure you want to reduce level of Player " +
+        this.state.currentPlayer,
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () => this.reducePlayerLevel()
+        },
+        {
+          label: "No",
+          onClick: () => {}
+        }
+      ]
+    });
+  }; //confirmSubmitAnswer
 
   returnToGamePage = () => {
     let update = { songSelected: false, gamePage: true };
@@ -158,6 +209,82 @@ export default class Umpire extends Component {
 
     return false;
   }; //alreadyAnswered
+
+  reducePlayerLevel = () => {
+    let update = {};
+    switch (this.state.currentPlayer) {
+      case 1:
+        if (this.state.player1Level != 0) {
+          update.player1Level = this.state.player1Level - 1;
+        }
+
+        break;
+
+      case 2:
+        if (this.state.player2Level != 0) {
+          update.player2Level = this.state.player2Level - 1;
+        }
+        break;
+
+      case 3:
+        if (this.state.player3Level) {
+          update.player3Level = this.state.player3Level - 1;
+        }
+
+        break;
+
+      default:
+        break;
+    }
+
+    this.updateGame(update);
+  }; //reducePlayerLevel
+
+  confirmRemovePlayer = player => {
+    if (this.state.currentPlayer != player) {
+      confirmAlert({
+        title: "Confirm to submit",
+        message: "Are you sure you want to remove Player " + player,
+        buttons: [
+          {
+            label: "Yes",
+            onClick: () => this.removePlayer(player)
+          },
+          {
+            label: "No",
+            onClick: () => {}
+          }
+        ]
+      });
+    } else {
+      alert(
+        "You can't remove a player currently in play. Switch player before you remove"
+      );
+    }
+  }; //confirmRemovePlayer
+
+  removePlayer = player => {
+    let update = {};
+    switch (player) {
+      case 1:
+        update.player1Removed = true;
+        break;
+
+      case 2:
+        update.player2Removed = true;
+        break;
+
+      case 3:
+        update.player3Removed = true;
+
+        break;
+
+      default:
+        break;
+    }
+
+    this.updateGame(update);
+  };
 
   updateGame = update => {
     this.gameRef
@@ -231,6 +358,8 @@ export default class Umpire extends Component {
                     {this.state.currentQuestion ? (
                       <p align="center">
                         Answer : <b>{this.state.currentQuestion.answer}</b>
+                        <br />
+                        Artist : <b>{this.state.currentQuestion.artist}</b>
                       </p>
                     ) : (
                       ""
@@ -293,54 +422,117 @@ export default class Umpire extends Component {
                 <span className="text-primary">{this.state.currentPlayer}</span>
               </div>
               <ul className="list-group list-group-flush">
-                <li className="list-group-item">
-                  <button
-                    className={
-                      "btn " +
-                      (this.state.currentPlayer == 1
-                        ? "btn-outline-primary"
-                        : "btn-outline-dark") +
-                      " btn-block"
-                    }
-                    onClick={() => {
-                      this.setCurrentPlayer(1);
-                    }}
-                  >
-                    Player 1
-                  </button>
-                </li>
-                <li className="list-group-item">
-                  <button
-                    className={
-                      "btn " +
-                      (this.state.currentPlayer == 2
-                        ? "btn-outline-primary"
-                        : "btn-outline-dark") +
-                      " btn-block"
-                    }
-                    onClick={() => {
-                      this.setCurrentPlayer(2);
-                    }}
-                  >
-                    Player 2
-                  </button>
-                </li>
-                <li className="list-group-item">
-                  <button
-                    className={
-                      "btn " +
-                      (this.state.currentPlayer == 3
-                        ? "btn-outline-primary"
-                        : "btn-outline-dark") +
-                      " btn-block"
-                    }
-                    onClick={() => {
-                      this.setCurrentPlayer(3);
-                    }}
-                  >
-                    Player 3
-                  </button>
-                </li>
+                {!this.state.player1Removed ? (
+                  <li className="list-group-item">
+                    <div className="row">
+                      <div className="col-md-8">
+                        <button
+                          className={
+                            "btn " +
+                            (this.state.currentPlayer == 1
+                              ? "btn-outline-primary"
+                              : "btn-outline-dark") +
+                            " btn-block"
+                          }
+                          onClick={() => {
+                            this.setCurrentPlayer(1);
+                          }}
+                        >
+                          Player 1
+                        </button>
+                      </div>
+                      <div className="col-md-2">
+                        <button
+                          className="btn btn-danger"
+                          data-toggle="tooltip"
+                          data-placement="top"
+                          title="Remove Player 1"
+                          onClick={() => {
+                            this.confirmRemovePlayer(1);
+                          }}
+                        >
+                          X
+                        </button>
+                      </div>
+                    </div>
+                  </li>
+                ) : (
+                  ""
+                )}
+                {!this.state.player2Removed ? (
+                  <li className="list-group-item">
+                    <div className="row">
+                      <div className="col-md-8">
+                        <button
+                          className={
+                            "btn " +
+                            (this.state.currentPlayer == 2
+                              ? "btn-outline-primary"
+                              : "btn-outline-dark") +
+                            " btn-block"
+                          }
+                          onClick={() => {
+                            this.setCurrentPlayer(2);
+                          }}
+                        >
+                          Player 2
+                        </button>
+                      </div>
+                      <div className="col-md-2">
+                        <button
+                          className="btn btn-danger"
+                          data-toggle="tooltip"
+                          data-placement="top"
+                          title="Remove Player 2"
+                          onClick={() => {
+                            this.confirmRemovePlayer(2);
+                          }}
+                        >
+                          X
+                        </button>
+                      </div>
+                    </div>
+                  </li>
+                ) : (
+                  ""
+                )}
+                {!this.state.player3Removed ? (
+                  <li className="list-group-item">
+                    <div className="row">
+                      <div className="col-md-8">
+                        <button
+                          className={
+                            "btn " +
+                            (this.state.currentPlayer == 3
+                              ? "btn-outline-primary"
+                              : "btn-outline-dark") +
+                            " btn-block"
+                          }
+                          onClick={() => {
+                            this.setCurrentPlayer(3);
+                          }}
+                        >
+                          Player 3
+                        </button>
+                      </div>
+                      <div className="col-md-2">
+                        <button
+                          className="btn btn-danger"
+                          data-toggle="tooltip"
+                          data-placement="top"
+                          title="Remove Player 3"
+                          onClick={() => {
+                            this.confirmRemovePlayer(3);
+                          }}
+                        >
+                          X
+                        </button>
+                      </div>
+                    </div>
+                  </li>
+                ) : (
+                  ""
+                )}
               </ul>
             </div>
 
@@ -352,9 +544,17 @@ export default class Umpire extends Component {
                 <li className="list-group-item">
                   <button
                     className="btn btn-primary btn-block"
-                    onClick={this.submitAnswer}
+                    onClick={this.confirmSubmitAnswer}
                   >
                     Confirm Answer
+                  </button>
+                </li>
+                <li className="list-group-item">
+                  <button
+                    className="btn btn-secondary btn-block"
+                    onClick={this.confirmReducePlayerLevel}
+                  >
+                    Reduce Player Level
                   </button>
                 </li>
                 {this.state.currentQuestion ? (

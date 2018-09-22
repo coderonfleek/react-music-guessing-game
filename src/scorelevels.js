@@ -55,22 +55,38 @@ const scoreLevels = [
   },
   {
     level: 2,
-    prize: "20,000"
+    prize: "15,000"
   },
   {
     level: 3,
-    prize: "40,000"
+    prize: "30,000"
   },
   {
     level: 4,
-    prize: "100,000"
+    prize: "50,000"
   },
   {
     level: 5,
-    prize: "500,000"
+    prize: "100,000"
   },
   {
     level: 6,
+    prize: "150,000"
+  },
+  {
+    level: 7,
+    prize: "200,000"
+  },
+  {
+    level: 8,
+    prize: "300,000"
+  },
+  {
+    level: 9,
+    prize: "500,000"
+  },
+  {
+    level: 10,
     prize: "1,000,000"
   }
 ];

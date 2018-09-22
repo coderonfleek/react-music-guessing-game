@@ -25,6 +25,7 @@ const questions = [
       }
     ],
     answer: "Bio Bio",
+    artist: "Duncan Mighty ft Reekado",
     scoreWeight: 5000
   },
   {
@@ -53,6 +54,7 @@ const questions = [
       }
     ],
     answer: "Aje",
+    artist: "DMW",
     scoreWeight: 5000
   },
   {
@@ -81,6 +83,7 @@ const questions = [
       }
     ],
     answer: "Lova Lova",
+    artist: "Tiwa Savage ft Duncan Mighty",
     scoreWeight: 5000
   },
   {
@@ -109,6 +112,7 @@ const questions = [
       }
     ],
     answer: "For You",
+    artist: "Kizz Daniel ft Wizkid",
     scoreWeight: 5000
   },
   {
@@ -137,6 +141,7 @@ const questions = [
       }
     ],
     answer: "Feeling the beat",
+    artist: "DJ Jimmy Jatt ft Wizkid",
     scoreWeight: 5000
   },
   {
@@ -165,6 +170,7 @@ const questions = [
       }
     ],
     answer: "Immediately",
+    artist: "Mystro ft Wizkid",
     scoreWeight: 50000
   },
   {
@@ -193,6 +199,7 @@ const questions = [
       }
     ],
     answer: "Soco",
+    artist: "Wizkid",
     scoreWeight: 50000
   },
   {
@@ -221,6 +228,7 @@ const questions = [
       }
     ],
     answer: "Green Light",
+    artist: "Tekno ft DJ Cuppy",
     scoreWeight: 50000
   },
   {
@@ -249,6 +257,7 @@ const questions = [
       }
     ],
     answer: "Rands and Naira",
+    artist: "Emmy G ft AB Crazy",
     scoreWeight: 50000
   },
   {
@@ -276,6 +285,7 @@ const questions = [
       }
     ],
     answer: "Ye",
+    artist: "Burna Boy",
     scoreWeight: 50000
   },
   {
@@ -304,6 +314,7 @@ const questions = [
       }
     ],
     answer: "Rude Boy",
+    artist: "GreyC ft Patoranking",
     scoreWeight: 100000
   },
   {
@@ -332,6 +343,7 @@ const questions = [
       }
     ],
     answer: "Red Alert",
+    artist: "Nyanda ft DJ Bobby",
     scoreWeight: 100000
   },
   {
@@ -360,6 +372,7 @@ const questions = [
       }
     ],
     answer: "Girls Like You",
+    artist: "Maroon 5 ft Cardi B",
     scoreWeight: 100000
   },
   {
@@ -388,6 +401,7 @@ const questions = [
       }
     ],
     answer: "Suh Different",
+    artist: "Patoranking",
     scoreWeight: 100000
   },
   {
@@ -416,6 +430,7 @@ const questions = [
       }
     ],
     answer: "Askamaya",
+    artist: "Teni",
     scoreWeight: 100000
   }
 ];
