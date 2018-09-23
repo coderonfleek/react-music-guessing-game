@@ -8,36 +8,19 @@ import "../App.css";
 import { confirmAlert } from "react-confirm-alert";
 import "../../node_modules/react-confirm-alert/src/react-confirm-alert.css";
 import $ from "jquery";
+import lifelines from "../lifelines";
+import game from "../game";
 
 export default class Umpire extends Component {
   questions;
   newGameInstance;
+  lifelines;
   constructor() {
     super();
     this.questions = questions;
+    this.lifelines = lifelines;
 
-    this.newGameInstance = {
-      currentLevel: 1,
-      currentQuestion: null,
-      answerSelected: false,
-      selectedAnswer: null,
-      noOfQuestionsPerLevel: 3,
-      noOfQuestionsAnsweredInLevel: 0,
-      allAnsweredQuestions: [],
-      scoreLevels: scoreLevels.reverse(),
-      totalScore: 0,
-      bonusPoints: 0,
-      selectedBonus: 30,
-      currentPlayer: 1,
-      player1Level: 0,
-      player2Level: 0,
-      player3Level: 0,
-      songPlaying: false,
-      player1Removed: false,
-      player2Removed: false,
-      player3Removed: false,
-      gameInitiationTime: +new Date()
-    };
+    this.newGameInstance = game;
 
     //Default state to empty game
     this.state = this.newGameInstance;
@@ -96,9 +79,30 @@ export default class Umpire extends Component {
   }; //selectSong
 
   setCurrentPlayer = player => {
-    this.updateGame({
+    let update = {
       currentPlayer: player
-    });
+    };
+
+    switch (player) {
+      case 1:
+        update.currentPlayerLifelines = this.state.player1Lifelines;
+
+        break;
+
+      case 2:
+        update.currentPlayerLifelines = this.state.player2Lifelines;
+        break;
+
+      case 3:
+        update.currentPlayerLifelines = this.state.player3Lifelines;
+
+        break;
+
+      default:
+        break;
+    }
+
+    this.updateGame(update);
   };
 
   changeGameLevel = () => {
@@ -227,7 +231,7 @@ export default class Umpire extends Component {
         break;
 
       case 3:
-        if (this.state.player3Level) {
+        if (this.state.player3Level != 0) {
           update.player3Level = this.state.player3Level - 1;
         }
 
@@ -286,6 +290,89 @@ export default class Umpire extends Component {
     this.updateGame(update);
   };
 
+  confirmLifelineUsed = (e, lifeline) => {
+    confirmAlert({
+      title: "Confirm to submit",
+      message:
+        "Are you sure you want to remove this lifeline for Player " +
+        this.state.currentPlayer,
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () => this.lifeLineUsed(e, lifeline)
+        },
+        {
+          label: "No",
+          onClick: () => {}
+        }
+      ]
+    });
+  }; //confirmLifelineUsed
+
+  lifeLineUsed = (e, lifeline) => {
+    let update = {};
+    let lifeLinesUpdate;
+    console.log(lifeline);
+    let lifeLineIndex = this.state.currentPlayerLifelines.indexOf(lifeline);
+    //Update the actual player's lifelines
+    switch (this.state.currentPlayer) {
+      case 1:
+        if (this.state.currentPlayerLifelines.length == 1) {
+          lifeLinesUpdate = [];
+        } else {
+          //this.state.player1Lifelines.splice(lifeLineIndex, 1);
+          delete this.state.player1Lifelines[lifeLineIndex];
+          lifeLinesUpdate = replaceUndefined(this.state.player1Lifelines);
+        }
+
+        update.player1Lifelines = lifeLinesUpdate;
+
+        break;
+
+      case 2:
+        if (this.state.currentPlayerLifelines.length == 1) {
+          lifeLinesUpdate = [];
+        } else {
+          //this.state.player2Lifelines.splice(lifeLineIndex, 1);
+          delete this.state.player2Lifelines[lifeLineIndex];
+          lifeLinesUpdate = replaceUndefined(this.state.player2Lifelines);
+        }
+        update.player2Lifelines = lifeLinesUpdate;
+        break;
+
+      case 3:
+        if (this.state.currentPlayerLifelines.length == 1) {
+          lifeLinesUpdate = [];
+        } else {
+          //this.state.player3Lifelines.splice(lifeLineIndex, 1);
+          delete this.state.player3Lifelines[lifeLineIndex];
+          lifeLinesUpdate = replaceUndefined(this.state.player3Lifelines);
+        }
+        update.player3Lifelines = lifeLinesUpdate;
+        break;
+
+      default:
+        break;
+    }
+
+    //Set the update to that of the current player
+    console.log(lifeLinesUpdate);
+    update.currentPlayerLifelines = lifeLinesUpdate;
+    this.updateGame(update);
+
+    function replaceUndefined(array) {
+      let newArray = array.filter(item => {
+        if (item === undefined) {
+          return null;
+        } else {
+          return item;
+        }
+      });
+
+      return newArray;
+    }
+  }; //lifeLineUsed
+
   updateGame = update => {
     this.gameRef
       .update(update)
@@ -305,16 +392,22 @@ export default class Umpire extends Component {
           <div className="col-md-3">
             <div className="card">
               <div className="card-header">Lifelines</div>
-              <div className="card-body">
-                <h5 className="card-title">Special title treatment</h5>
-                <p className="card-text">
-                  With supporting text below as a natural lead-in to additional
-                  content.
-                </p>
-                <a href="#" className="btn btn-primary">
-                  Go somewhere
-                </a>
-              </div>
+              <ul className="list-group list-group-flush">
+                {this.state.currentPlayerLifelines.map(index => {
+                  let lifeline = _.find(this.lifelines, { id: index });
+                  return (
+                    <li
+                      key={index}
+                      className="list-group-item"
+                      onClick={e => {
+                        this.confirmLifelineUsed(e, index);
+                      }}
+                    >
+                      <i className={`fas ${lifeline.icon}`} /> {lifeline.name}
+                    </li>
+                  );
+                })}
+              </ul>
             </div>
           </div>
           <div className="col-md-6">

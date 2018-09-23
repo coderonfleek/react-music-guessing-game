@@ -8,12 +8,15 @@ import logo from "../logo.png";
 import { firestore } from "../firebase";
 import config from "../config";
 import _ from "lodash";
+import lifelines from "../lifelines";
+import game from "../game";
 
 class Game extends Component {
   questions;
   gameID;
   gameRef;
   selectedOptionElement;
+  lifelines;
   audio = new Audio();
   constructor() {
     super();
@@ -23,27 +26,10 @@ class Game extends Component {
       timestampsInSnapshots: true
     });
 
+    this.lifelines = lifelines;
+
     //Create a new game instance
-    let newGameInstance = {
-      currentLevel: 1,
-      currentQuestion: null,
-      answerSelected: false,
-      selectedAnswer: null,
-      noOfQuestionsPerLevel: 3,
-      noOfQuestionsAnsweredInLevel: 0,
-      allAnsweredQuestions: [],
-      totalScore: 0,
-      scoreLevels: scoreLevels.reverse(),
-      bonusPoints: 0,
-      timerStartingPoint: 20,
-      songSelected: false,
-      gameInitiationTime: +new Date(),
-      lifeline1Used: false,
-      lifeline2Used: false,
-      lifeline3Used: false,
-      lifeline4Used: false,
-      gamePage: true
-    };
+    let newGameInstance = game;
 
     this.state = newGameInstance;
 
@@ -245,50 +231,14 @@ class Game extends Component {
                   {this.state.bonusPoints}
                 </div>
                 <div className="game-assistants-features">
-                  <div className="feature">
-                    <button
-                      id="repeat-beat"
-                      className={`${
-                        this.state.lifeline1Used ? "life-line-used" : ""
-                      }`}
-                    >
-                      REPEAT BEAT
-                    </button>
-                    &nbsp;-100
-                  </div>
-                  <div className="feature">
-                    <button
-                      id="repeat-5-seconds"
-                      className={`${
-                        this.state.lifeline2Used ? "life-line-used" : ""
-                      }`}
-                    >
-                      REPEAT +5 SECONDS
-                    </button>
-                    &nbsp;-150
-                  </div>
-                  <div className="feature">
-                    <button
-                      id="reveal-2-letters"
-                      className={`${
-                        this.state.lifeline3Used ? "life-line-used" : ""
-                      }`}
-                    >
-                      REVEAL 2 LETTERS
-                    </button>
-                    &nbsp;-250
-                  </div>
-                  <div className="feature">
-                    <button
-                      id="skip-beats"
-                      className={`${
-                        this.state.lifeline4Used ? "life-line-used" : ""
-                      }`}
-                    >
-                      SKIP BEATS
-                    </button>
-                    &nbsp;-300
-                  </div>
+                  {this.state.currentPlayerLifelines.map(index => {
+                    let lifeline = _.find(this.lifelines, { id: index });
+                    return (
+                      <div className="feature">
+                        <button id="repeat-beat">{lifeline.name}</button>
+                      </div>
+                    );
+                  })}
                 </div>
                 <div className="game-logo">
                   <img src={logo} />
