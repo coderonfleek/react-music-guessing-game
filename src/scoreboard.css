@@ -1,0 +1,52 @@
+table {
+  background-image: linear-gradient(
+    to bottom right,
+    rgb(0, 183, 255),
+    rgb(0, 217, 255)
+  );
+}
+td {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin: 5px !important;
+}
+
+#scoredboard {
+  margin-top: 50px;
+}
+
+#scoreboard-header {
+  background-image: linear-gradient(
+    to bottom right,
+    rgb(0, 183, 255),
+    rgb(0, 217, 255)
+  );
+
+  color: white;
+  text-align: center;
+}
+
+.bg-gold {
+  background-color: goldenrod;
+  color: #fff;
+}
+
+.prizesColumn {
+  background-image: linear-gradient(
+    to bottom right,
+    rgb(0, 183, 255),
+    rgb(215, 135, 240)
+  );
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+}
+
+.prizeMoney {
+  display: block;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  background-color: #fff;
+  color: goldenrod;
+  font-size: 16px;
+  padding-left: 10px;
+}
