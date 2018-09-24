@@ -177,7 +177,9 @@ class Game extends Component {
                     <div className="row">
                       <div className="col-md-12">
                         <div className="music-numbers-board-level">
-                          LEVEL {this.state.currentLevel}
+                          {this.state.currentLevel == 4
+                            ? "TIE BREAKER ROUND"
+                            : `LEVEL ${this.state.currentLevel}`}
                         </div>
                       </div>
                       <div className="col-md-12">
@@ -226,10 +228,7 @@ class Game extends Component {
             <div className="col-md-3 col-md-offset-2">
               <div className="game-assistants">
                 <div id="game-assistants-title">GAME ASSISTANTS</div>
-                <div id="game-assistants-points">POINTS</div>
-                <div id="game-assistants-points-numbers">
-                  {this.state.bonusPoints}
-                </div>
+                <div>&nbsp;</div>
                 <div className="game-assistants-features">
                   {this.state.currentPlayerLifelines.map(index => {
                     let lifeline = _.find(this.lifelines, { id: index });

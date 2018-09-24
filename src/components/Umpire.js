@@ -106,7 +106,7 @@ export default class Umpire extends Component {
   };
 
   changeGameLevel = () => {
-    if (this.state.currentLevel < 3) {
+    if (this.state.currentLevel < 4) {
       this.updateGame({
         currentLevel: this.state.currentLevel + 1
       });
