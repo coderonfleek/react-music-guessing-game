@@ -55,6 +55,23 @@ export default class Umpire extends Component {
     $('[data-toggle="tooltip"]').tooltip();
   }
 
+  confirmStartNewGame = () => {
+    confirmAlert({
+      title: "Confirm to submit",
+      message: "Are you sure you want to start a new game",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () => this.startNewGame()
+        },
+        {
+          label: "No",
+          onClick: () => {}
+        }
+      ]
+    });
+  }; //confirmSubmitAnswer
+
   startNewGame = () => {
     firestore
       .collection(config.gameCollection)
@@ -86,15 +103,18 @@ export default class Umpire extends Component {
     switch (player) {
       case 1:
         update.currentPlayerLifelines = this.state.player1Lifelines;
+        update.currentPlayerName = this.state.player1Name;
 
         break;
 
       case 2:
         update.currentPlayerLifelines = this.state.player2Lifelines;
+        update.currentPlayerName = this.state.player2Name;
         break;
 
       case 3:
         update.currentPlayerLifelines = this.state.player3Lifelines;
+        update.currentPlayerName = this.state.player3Name;
 
         break;
 
@@ -104,6 +124,25 @@ export default class Umpire extends Component {
 
     this.updateGame(update);
   };
+
+  confirmChangeGameLevel = () => {
+    confirmAlert({
+      title: "Confirm to submit",
+      message:
+        "Are you sure you want to change the game level to Level : " +
+        (this.state.currentLevel + 1),
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () => this.changeGameLevel()
+        },
+        {
+          label: "No",
+          onClick: () => {}
+        }
+      ]
+    });
+  }; //confirmSubmitAnswer
 
   changeGameLevel = () => {
     if (this.state.currentLevel < 4) {
@@ -373,6 +412,23 @@ export default class Umpire extends Component {
     }
   }; //lifeLineUsed
 
+  savePlayerNames = e => {
+    e.preventDefault();
+    let update = {
+      player1Name: this.state.player1Name,
+      player2Name: this.state.player2Name,
+      player3Name: this.state.player3Name
+    };
+    console.log(this.state);
+    this.updateGame(update);
+  }; //savePlayerNames
+
+  updateInput = e => {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  }; //updateInput
+
   updateGame = update => {
     this.gameRef
       .update(update)
@@ -390,24 +446,74 @@ export default class Umpire extends Component {
       <div className="container">
         <div className="row">
           <div className="col-md-3">
-            <div className="card">
-              <div className="card-header">Lifelines</div>
-              <ul className="list-group list-group-flush">
-                {this.state.currentPlayerLifelines.map(index => {
-                  let lifeline = _.find(this.lifelines, { id: index });
-                  return (
-                    <li
-                      key={index}
-                      className="list-group-item"
-                      onClick={e => {
-                        this.confirmLifelineUsed(e, index);
-                      }}
+            <div className="row">
+              <div className="card">
+                <div className="card-header">Lifelines</div>
+                <ul className="list-group list-group-flush">
+                  {this.state.currentPlayerLifelines.map(index => {
+                    let lifeline = _.find(this.lifelines, { id: index });
+                    return lifeline ? (
+                      <li
+                        key={index}
+                        className="list-group-item"
+                        onClick={e => {
+                          this.confirmLifelineUsed(e, index);
+                        }}
+                      >
+                        <i className={`fas ${lifeline.icon}`} /> {lifeline.name}
+                      </li>
+                    ) : (
+                      ""
+                    );
+                  })}
+                </ul>
+              </div>
+            </div>
+            <div className="row">&nbsp;</div>
+            <div className="row">
+              <div className="card">
+                <div className="card-header">Player Names</div>
+                <div className="card-body">
+                  <form>
+                    <div className="form-group">
+                      <input
+                        type="text"
+                        name="player1Name"
+                        onChange={this.updateInput}
+                        className="form-control"
+                        value={this.state.player1Name}
+                        placeholder="Player 1 Name"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <input
+                        type="text"
+                        name="player2Name"
+                        onChange={this.updateInput}
+                        className="form-control"
+                        value={this.state.player2Name}
+                        placeholder="Player 2 Name"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <input
+                        type="text"
+                        name="player3Name"
+                        onChange={this.updateInput}
+                        className="form-control"
+                        value={this.state.player3Name}
+                        placeholder="Player 3 Name"
+                      />
+                    </div>
+                    <button
+                      class="btn btn-primary"
+                      onClick={this.savePlayerNames}
                     >
-                      <i className={`fas ${lifeline.icon}`} /> {lifeline.name}
-                    </li>
-                  );
-                })}
-              </ul>
+                      Save
+                    </button>
+                  </form>
+                </div>
+              </div>
             </div>
           </div>
           <div className="col-md-6">
@@ -471,13 +577,13 @@ export default class Umpire extends Component {
                   <tr>
                     <th scope="col">#</th>
                     <th scope="col" className="text-success">
-                      Player 1
+                      {this.state.player1Name}
                     </th>
                     <th scope="col" className="text-danger">
-                      Player 2
+                      {this.state.player2Name}
                     </th>
                     <th scope="col" className="text-primary">
-                      Player 3
+                      {this.state.player3Name}
                     </th>
                   </tr>
                 </thead>
@@ -665,7 +771,7 @@ export default class Umpire extends Component {
                 <li className="list-group-item">
                   <button
                     className="btn btn-success btn-block"
-                    onClick={this.changeGameLevel}
+                    onClick={this.confirmChangeGameLevel}
                   >
                     Next Game Level
                   </button>
@@ -673,7 +779,7 @@ export default class Umpire extends Component {
                 <li className="list-group-item">
                   <button
                     className="btn btn-danger btn-block"
-                    onClick={this.startNewGame}
+                    onClick={this.confirmStartNewGame}
                   >
                     Start New Game
                   </button>

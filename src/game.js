@@ -1,5 +1,5 @@
 import scoreLevels from "./scorelevels";
-let defaultLifelines = [1, 2, 3];
+let defaultLifelines = [1, 2, 3, 4];
 const newGameInstance = {
   currentLevel: 1,
   currentQuestion: null,
@@ -24,6 +24,10 @@ const newGameInstance = {
   player2Lifelines: defaultLifelines,
   player3Lifelines: defaultLifelines,
   currentPlayerLifelines: defaultLifelines,
+  player1Name: "Player 1",
+  player2Name: "Player 2",
+  player3Name: "Player 3",
+  currentPlayerName: "Player 1",
   gameInitiationTime: +new Date()
 };
 

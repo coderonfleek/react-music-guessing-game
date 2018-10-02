@@ -165,7 +165,13 @@ class Game extends Component {
             <div className="col-md-3">
               <div id="score-level">
                 <div id="score-level-title">PLAYER IN PLAY</div>
-                <div id="activePlayerDisplay">{this.state.currentPlayer}</div>
+                <div id="activePlayerDisplay">
+                  {this.state.currentPlayer}
+
+                  <div id="activePlayerName">
+                    {this.state.currentPlayerName}
+                  </div>
+                </div>
               </div>
             </div>
             <div className="col-md-6">

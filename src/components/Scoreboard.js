@@ -3,6 +3,7 @@ import { firestore } from "../firebase";
 import config from "../config";
 import logo from "../new-logo.png";
 import "../scoreboard.css";
+import GameAssistants from "./GameAssistants";
 
 export default class ScoreBoard extends Component {
   constructor() {
@@ -49,21 +50,39 @@ export default class ScoreBoard extends Component {
               <table className="table table-bordered">
                 <thead>
                   <tr>
-                    <th scope="col" className="bg-gold">
+                    <th scope="col" className="bg-gold w-25">
                       #
                     </th>
-                    <th scope="col" className="text-success bg-light">
-                      Player 1
+                    <th scope="col" className="text-success bg-light w-25">
+                      {this.state.player1Name}
                     </th>
-                    <th scope="col" className="text-danger bg-light">
-                      Player 2
+                    <th scope="col" className="text-danger bg-light w-25">
+                      {this.state.player2Name}
                     </th>
-                    <th scope="col" className="text-primary bg-light">
-                      Player 3
+                    <th scope="col" className="text-primary bg-light w-25">
+                      {this.state.player3Name}
                     </th>
                   </tr>
                 </thead>
                 <tbody>
+                  <tr id="lifelines-row">
+                    <td>&nbsp;</td>
+                    <td>
+                      <GameAssistants
+                        playerLifelines={this.state.player1Lifelines}
+                      />
+                    </td>
+                    <td>
+                      <GameAssistants
+                        playerLifelines={this.state.player2Lifelines}
+                      />
+                    </td>
+                    <td>
+                      <GameAssistants
+                        playerLifelines={this.state.player3Lifelines}
+                      />
+                    </td>
+                  </tr>
                   {this.state.scoreLevels.map(level => {
                     return (
                       <tr key={level.level}>
